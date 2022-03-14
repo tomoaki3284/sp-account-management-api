@@ -4,6 +4,7 @@ import com.tomoaki.medicalcenterapi.model.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 /**
  * User repository for accessing data
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUsername(String username);
+	Mono<Optional<User>> findByUsername(String username);
 	
 	/**
 	 * Return false if username already exist in the database
@@ -21,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param username
 	 * @return
 	 */
-	Boolean existsByUsername(String username);
+	Mono<Boolean> existsByUsername(String username);
 	
 	/**
 	 * Return false if email already exist in the database
@@ -29,5 +30,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param email
 	 * @return
 	 */
-	Boolean existsByEmail(String email);
+	Mono<Boolean> existsByEmail(String email);
 }
