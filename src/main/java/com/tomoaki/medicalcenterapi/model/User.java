@@ -1,5 +1,11 @@
 package com.tomoaki.medicalcenterapi.model;
 
+/**
+ * Model for User stored in database
+ *
+ * @author tmitsuhashi9621
+ * @since 3/14/2022
+ */
 public class User {
 	private long id;
 	private String username;
