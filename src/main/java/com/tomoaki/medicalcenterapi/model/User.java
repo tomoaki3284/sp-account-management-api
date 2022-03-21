@@ -23,6 +23,10 @@ public class User {
 		this.date = date;
 	}
 	
+	public User() {
+	
+	}
+	
 	public User(String username, String email, String password) {
 		this.username = username;
 		this.email = email;

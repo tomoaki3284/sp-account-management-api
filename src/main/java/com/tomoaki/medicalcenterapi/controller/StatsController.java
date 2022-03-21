@@ -13,7 +13,7 @@ public class StatsController {
 	@GetMapping("/stats")
 	public Mono<ResponseEntity<?>> getStats() {
 		return Mono.just(
-			ResponseEntity.ok("success")
+			ResponseEntity.ok("ok")
 		);
 	}
 }
