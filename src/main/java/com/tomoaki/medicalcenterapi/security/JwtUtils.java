@@ -1,6 +1,6 @@
 package com.tomoaki.medicalcenterapi.security;
 
-import com.tomoaki.medicalcenterapi.service.UserDetailsImpl;
+import com.tomoaki.medicalcenterapi.model.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
