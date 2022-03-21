@@ -1,5 +1,7 @@
 package com.tomoaki.medicalcenterapi.model;
 
+import java.util.Date;
+
 /**
  * Model for User stored in database
  *
@@ -11,6 +13,15 @@ public class User {
 	private String username;
 	private String email;
 	private String password;
+	private Date date;
+	
+	public User(long id, String username, String email, String password, Date date) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.date = date;
+	}
 	
 	public User(String username, String email, String password) {
 		this.username = username;
