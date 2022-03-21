@@ -1,8 +1,13 @@
 package com.tomoaki.medicalcenterapi.controller;
 
-import com.tomoaki.medicalcenterapi.model.request.LoginRequest;
+import com.tomoaki.medicalcenterapi.repository.UserRepository;
+import com.tomoaki.medicalcenterapi.security.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,24 +20,40 @@ import reactor.core.publisher.Mono;
  * @author tmitsuhashi9621
  * @since 3/14/2022
  */
-@CrossOrigin(origins = "*")
+@Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 	
-	@PostMapping("/signin")
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private JwtUtils jwtUtils;
+	
+	@Autowired
+	public AuthController(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+	
+	@PostMapping("/login")
 	public Mono<ResponseEntity<?>> authenticateUser(
-		@RequestBody LoginRequest loginRequest
+		Authentication authentication
 	) {
-		// todo
-		return Mono.just(ResponseEntity.ok(null));
+		// OPTION 1 to return username
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		return Mono.just(
+			ResponseEntity.ok()
+				.header(HttpHeaders.AUTHORIZATION, jwtUtils.generateJwtToken(authentication))
+				.body("Hi " + userDetails.getPassword() + ", you are just logged in")
+		);
 	}
 	
 	@PostMapping("/signup")
 	public Mono<ResponseEntity<?>> registerUser(
-		@RequestBody LoginRequest loginRequest
+		@RequestBody String loginRequest
 	) {
 		// todo
-		return Mono.just(ResponseEntity.ok(null));
+		return Mono.just(ResponseEntity.ok(loginRequest));
 	}
 }
