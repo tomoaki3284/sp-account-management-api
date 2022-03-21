@@ -1,8 +1,8 @@
 package com.tomoaki.medicalcenterapi.repository;
 
 import com.tomoaki.medicalcenterapi.model.User;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -13,8 +13,10 @@ import reactor.core.publisher.Mono;
  * @since 3/14/2022
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-	Mono<Optional<User>> findByUsername(String username);
+public interface UserRepository extends ReactiveCrudRepository<User, Long> {
+	
+	@Query("SELECT * from User where username = :username")
+	Mono<User> findByUsername(String username);
 	
 	/**
 	 * Return false if username already exist in the database
