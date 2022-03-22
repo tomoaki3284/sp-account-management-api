@@ -6,6 +6,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * Model that represent jwt auth token with user information
+ *
+ * @author tmitsuhashi9621
+ * @since 3/22/2022
+ */
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 	private String token;
 	private UserDetails userDetails;

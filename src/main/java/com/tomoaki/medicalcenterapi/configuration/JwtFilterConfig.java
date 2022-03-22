@@ -16,6 +16,12 @@ import org.springframework.security.web.server.authentication.WebFilterChainServ
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import reactor.core.publisher.Mono;
 
+/**
+ * Necessary setup/configuration for jwt filter.
+ *
+ * @author tmitsuhashi9621
+ * @since 3/22/2022
+ */
 @Configuration
 public class JwtFilterConfig {
 	
@@ -37,14 +43,17 @@ public class JwtFilterConfig {
 	@Bean
 	@Primary
 	AuthenticationWebFilter jwtAuthenticationWebFilter(){
+		// create a filter from custom jwt auth manager
 		AuthenticationWebFilter filter = new AuthenticationWebFilter(this.jwtReactiveAuthenticationManager);
 		
+		// need to have a request converter before the request reaches to filter, so setting it here
 		filter.setServerAuthenticationConverter(this.jwtAuthenticationConverter);
 		
 		filter.setAuthenticationSuccessHandler(new WebFilterChainServerAuthenticationSuccessHandler());
 		filter.setAuthenticationFailureHandler((exchange, exception) ->
 			Mono.error(new BadCredentialsException("Wrong authentication token")));
 		
+		// set the path that requires this auth filter
 		filter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/resource/**"));
 		
 		return filter;

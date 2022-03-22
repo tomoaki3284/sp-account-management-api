@@ -14,6 +14,12 @@ import org.springframework.security.web.server.authentication.WebFilterChainServ
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import reactor.core.publisher.Mono;
 
+/**
+ * Security Configuration for WebFlux.
+ *
+ * @author tmitsuhashi9621
+ * @since 3/22/2022
+ */
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class WebFluxSecurityConfiguration {
@@ -21,6 +27,12 @@ public class WebFluxSecurityConfiguration {
 	@Autowired
 	private AuthenticationWebFilter jwtAuthenticationWebFilter;
 	
+	/**
+	 * Set up a filter before the request reaches to the controller.
+	 *
+	 * @param http
+	 * @return SecurityWebFilterChain
+	 */
 	@Bean
 	public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
 		String[] patterns = new String[]{"/api/v1/auth/**"};
@@ -33,19 +45,19 @@ public class WebFluxSecurityConfiguration {
 		http
 			.csrf().disable()
 			
+			// handle exception
 			.exceptionHandling()
-			.authenticationEntryPoint((exchange, exception) -> Mono.error(exception))
+			.authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.FORBIDDEN))
 			.accessDeniedHandler((exchange, exception) -> Mono.error(exception))
 			
 			// no session, make it stateless
 			.and()
 			.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 			
-			// add AuthenticationWebFilter and set the handler
 			.formLogin()
 			.loginPage(loginFormRoute)
 			.authenticationSuccessHandler(new WebFilterChainServerAuthenticationSuccessHandler())
-//			 this would trigger when user is not found or the password is incorrect, returns 401 Unauthorized
+			// this would trigger when user is not found or the password is incorrect, returns 401 Unauthorized
 			.authenticationFailureHandler(((webFilterExchange, exception) -> Mono.error(exception)))
 			
 			// allow patterns path access without authentication,
@@ -55,12 +67,10 @@ public class WebFluxSecurityConfiguration {
 			.pathMatchers("/auth/login").permitAll()
 			.pathMatchers("/resource/**").authenticated()
 			
+			// add jwt auth filter at Authentication phase
 			.and()
 			.addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
 			.httpBasic();
-		
-		http.exceptionHandling()
-			.authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.FORBIDDEN));
 		
 		return http.build();
 	}

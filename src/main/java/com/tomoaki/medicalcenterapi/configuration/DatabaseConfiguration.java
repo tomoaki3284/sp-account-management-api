@@ -27,8 +27,6 @@ public class DatabaseConfiguration extends AbstractR2dbcConfiguration {
 	@Value("${spring.r2dbc.password}")
 	private String password;
 	
-	
-	
 	@Override
 	@Bean
 	public ConnectionFactory connectionFactory() {

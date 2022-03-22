@@ -11,6 +11,12 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+/**
+ * WebFlux specific jwt auth manager, which authenticate jwt token at the filter
+ *
+ * @author tmitsuhashi9621
+ * @since 3/22/2022
+ */
 @Slf4j
 @Component
 @Qualifier("jwt")

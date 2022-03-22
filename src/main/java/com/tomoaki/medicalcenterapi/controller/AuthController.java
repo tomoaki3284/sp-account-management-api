@@ -45,7 +45,7 @@ public class AuthController {
 		return Mono.just(
 			ResponseEntity.ok()
 				.header(HttpHeaders.AUTHORIZATION, jwtUtils.generateJwtToken(authentication))
-				.body("Hi " + userDetails.getPassword() + ", you are just logged in")
+				.body("success")
 		);
 	}
 	
