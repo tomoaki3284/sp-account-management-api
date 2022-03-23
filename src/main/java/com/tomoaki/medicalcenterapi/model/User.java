@@ -1,6 +1,8 @@
 package com.tomoaki.medicalcenterapi.model;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDate;
+import org.springframework.data.relational.core.mapping.Column;
 
 /**
  * Model for User stored in database
@@ -9,13 +11,23 @@ import java.util.Date;
  * @since 3/14/2022
  */
 public class User {
-	private long id;
-	private String username;
-	private String email;
-	private String password;
-	private Date date;
 	
-	public User(long id, String username, String email, String password, Date date) {
+	@JsonIgnore
+	private long id;
+	
+	@Column
+	private String username;
+	
+	@Column
+	private String email;
+	
+	@Column
+	private String password;
+	
+	@Column
+	private LocalDate date;
+	
+	public User(long id, String username, String email, String password, LocalDate date) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -31,6 +43,14 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+	}
+	
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+	
+	public LocalDate getDate() {
+		return date;
 	}
 	
 	public long getId() {
