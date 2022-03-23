@@ -64,7 +64,7 @@ public class WebFluxSecurityConfiguration {
 			// and anything else needs authentication
 			.and()
 			.authorizeExchange()
-			.pathMatchers("/auth/login").permitAll()
+			.pathMatchers("/auth/**").permitAll()
 			.pathMatchers("/resource/**").authenticated()
 			
 			// add jwt auth filter at Authentication phase
