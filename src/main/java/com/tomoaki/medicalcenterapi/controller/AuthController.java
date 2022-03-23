@@ -1,10 +1,13 @@
 package com.tomoaki.medicalcenterapi.controller;
 
-import com.tomoaki.medicalcenterapi.repository.UserRepository;
+import com.tomoaki.medicalcenterapi.model.Response;
+import com.tomoaki.medicalcenterapi.model.User;
 import com.tomoaki.medicalcenterapi.security.JwtUtils;
+import com.tomoaki.medicalcenterapi.service.ReactiveUserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,15 +29,10 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private JwtUtils jwtUtils;
 	
 	@Autowired
-	public AuthController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	private ReactiveUserDetailsServiceImpl reactiveUserDetailsService;
 	
 	@PostMapping("/login")
 	public Mono<ResponseEntity<?>> authenticateUser(
@@ -49,11 +47,36 @@ public class AuthController {
 		);
 	}
 	
-	@PostMapping("/signup")
+	@RequestMapping(value = "/signup")
 	public Mono<ResponseEntity<?>> registerUser(
-		@RequestBody String loginRequest
+		@RequestBody User user
 	) {
-		// todo
-		return Mono.just(ResponseEntity.ok(loginRequest));
+		Mono<Integer> emailExist = reactiveUserDetailsService.existsByEmail(user.getEmail());
+		Mono<Integer> usernameExist = reactiveUserDetailsService.existsByUsername(user.getUsername());
+		
+		return Mono.zip(emailExist, usernameExist)
+			.flatMap(result -> {
+				if (result.getT1() == 1) {
+					return Mono.just(
+						ResponseEntity
+							.status(HttpStatus.CONFLICT)
+							.body(new Response("email exists"))
+					);
+				} else if (result.getT2() == 1) {
+					return Mono.just(
+						ResponseEntity
+							.status(HttpStatus.CONFLICT)
+							.body(new Response("username exists"))
+					);
+				} else {
+					return reactiveUserDetailsService
+						.saveUser(user)
+						.flatMap(success -> Mono.just(
+							ResponseEntity
+								.ok()
+								.body(new Response("success"))
+						));
+				}
+			});
 	}
 }
