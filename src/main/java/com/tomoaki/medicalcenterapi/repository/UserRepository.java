@@ -24,7 +24,8 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 	 * @param username
 	 * @return
 	 */
-	Mono<Boolean> existsByUsername(String username);
+	@Query("SELECT EXISTS(SELECT 1 FROM User WHERE username = :username)")
+	Mono<Integer> existsByUsername(String username);
 	
 	/**
 	 * Return false if email already exist in the database
@@ -32,5 +33,6 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 	 * @param email
 	 * @return
 	 */
-	Mono<Boolean> existsByEmail(String email);
+	@Query("SELECT EXISTS(SELECT 1 FROM User WHERE email = :email)")
+	Mono<Integer> existsByEmail(String email);
 }
