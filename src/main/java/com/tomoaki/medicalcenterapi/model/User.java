@@ -2,6 +2,7 @@ package com.tomoaki.medicalcenterapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.data.relational.core.mapping.Column;
 public class User {
 	
 	@JsonIgnore
+	@Id
 	private long id;
 	
 	@Column
@@ -24,7 +26,7 @@ public class User {
 	@Column
 	private String password;
 	
-	@Column
+	@Column("creation_date")
 	private LocalDate date;
 	
 	public User(long id, String username, String email, String password, LocalDate date) {

@@ -10,7 +10,6 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
-import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import reactor.core.publisher.Mono;
 
@@ -36,7 +35,6 @@ public class WebFluxSecurityConfiguration {
 	@Bean
 	public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
 		String[] patterns = new String[]{"/api/v1/auth/**"};
-		String loginFormRoute = "/auth/login";
 		
 		/*
 			For auth routes, client can access it without jwt. so permit all for patterns routes
@@ -54,15 +52,13 @@ public class WebFluxSecurityConfiguration {
 			.and()
 			.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 			
+			// disable spring security default login form
+			// because we have our simple custom logic in service
 			.formLogin()
-			.loginPage(loginFormRoute)
-			.authenticationSuccessHandler(new WebFilterChainServerAuthenticationSuccessHandler())
-			// this would trigger when user is not found or the password is incorrect, returns 401 Unauthorized
-			.authenticationFailureHandler(((webFilterExchange, exception) -> Mono.error(exception)))
+			.disable()
 			
 			// allow patterns path access without authentication,
 			// and anything else needs authentication
-			.and()
 			.authorizeExchange()
 			.pathMatchers("/auth/**").permitAll()
 			.pathMatchers("/resource/**").authenticated()

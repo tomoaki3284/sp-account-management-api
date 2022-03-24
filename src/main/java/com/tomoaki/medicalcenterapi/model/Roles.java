@@ -1,4 +1,4 @@
-package com.tomoaki.medicalcenterapi.configuration;
+package com.tomoaki.medicalcenterapi.model;
 
 public class Roles {
     public static String ADMIN = "ADMIN";

@@ -3,7 +3,6 @@ package com.tomoaki.medicalcenterapi.filter;
 import com.tomoaki.medicalcenterapi.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,8 +17,7 @@ import reactor.core.publisher.Mono;
  * @since 3/22/2022
  */
 @Slf4j
-@Component
-@Qualifier("jwt")
+@Component("jwt")
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 	
 	private final JwtUtils jwtUtil;

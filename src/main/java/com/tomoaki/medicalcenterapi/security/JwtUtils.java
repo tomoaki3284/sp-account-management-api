@@ -41,6 +41,15 @@ public class JwtUtils {
 			.compact();
 	}
 	
+	public String generateJwtToken(UserDetailsImpl user) {
+		return Jwts.builder()
+			.setSubject((user.getUsername()))
+			.setIssuedAt(new Date())
+			.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+			.signWith(SignatureAlgorithm.HS512, jwtSecret)
+			.compact();
+	}
+	
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}

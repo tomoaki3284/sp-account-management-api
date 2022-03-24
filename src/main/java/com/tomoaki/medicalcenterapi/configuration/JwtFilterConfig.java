@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
@@ -40,7 +38,7 @@ public class JwtFilterConfig {
 		this.jwtAuthenticationConverter = jwtAuthenticationConverter;
 	}
 	
-	@Bean
+	@Bean(name="jwtWebFilter")
 	@Primary
 	AuthenticationWebFilter jwtAuthenticationWebFilter(){
 		// create a filter from custom jwt auth manager
@@ -57,11 +55,5 @@ public class JwtFilterConfig {
 		filter.setRequiresAuthenticationMatcher(ServerWebExchangeMatchers.pathMatchers("/resource/**"));
 		
 		return filter;
-	}
-	
-	@Bean
-	@Primary
-	ReactiveAuthenticationManager userDetailsRepositoryReactiveAuthenticationManager(){
-		return new UserDetailsRepositoryReactiveAuthenticationManager(this.userDetailsService);
 	}
 }
