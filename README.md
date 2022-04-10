@@ -1,9 +1,17 @@
-#Instruction
+#Leetcode backend application
 
-## git clone
-Clone this repo
+## Documentation
+https://tomoaki3284.atlassian.net/l/c/0br2ym2x
+
+## Building
 ```shell script
-git clone https://github.com/tomoaki3284/medical-center-api.git
+mvn clean package
+```
+
+## How to run
+#### Using Spring Boot Maven Plugin
+```shell script
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ```
 
 ## Configuration
@@ -12,16 +20,10 @@ Change the configuration to your own in the application.properties file. Below i
 /medical-center-api/src/main/resources/application.properties
 ```
 
-## How to run
-Run the spring boot
-```shell script
-./mvnw spring-boot:run
-```
-
 ## Request
 Here is the basic request:
 ```shell script
 curl -X POST http://localhost:8081/auth/signup
    -H 'Content-Type: application/json'
-   -d '{"username":"tomo","password":"1234", "email":"tomcat@yahoo.com"}'
+   -d '{"username":"tomo","password":"1234", "email":"tomo@yahoo.com"}'
 ```
