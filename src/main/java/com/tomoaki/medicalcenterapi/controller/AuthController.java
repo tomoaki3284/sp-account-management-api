@@ -48,7 +48,7 @@ public class AuthController {
 			));
 	}
 	
-	@RequestMapping(value = "/signup")
+	@PostMapping(value = "/signup")
 	public Mono<ResponseEntity<?>> registerUser(
 		@RequestBody User user
 	) {

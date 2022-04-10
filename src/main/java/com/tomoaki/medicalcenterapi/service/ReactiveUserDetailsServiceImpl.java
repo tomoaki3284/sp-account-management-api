@@ -74,7 +74,7 @@ public class ReactiveUserDetailsServiceImpl implements ReactiveUserDetailsServic
 			}))
 			.filter(user -> passwordEncoder.matches(password, user.getPassword()))
 			.switchIfEmpty(Mono.defer(() -> {
-				logger.info("password don't much");
+				logger.info("password don't match");
 				return Mono.error(new BadCredentialsException("invalid login credentials"));
 			}))
 			.map(user -> {

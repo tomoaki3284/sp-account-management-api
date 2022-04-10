@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 /**
  * Model for User stored in database
@@ -11,6 +12,7 @@ import org.springframework.data.relational.core.mapping.Column;
  * @author tmitsuhashi9621
  * @since 3/14/2022
  */
+@Table("User")
 public class User {
 	
 	@JsonIgnore
