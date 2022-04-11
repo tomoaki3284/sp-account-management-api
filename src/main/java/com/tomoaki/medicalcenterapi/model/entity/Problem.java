@@ -1,4 +1,4 @@
-package com.tomoaki.medicalcenterapi.model;
+package com.tomoaki.medicalcenterapi.model.entity;
 
 import com.tomoaki.medicalcenterapi.model.enums.Difficulty;
 import com.tomoaki.medicalcenterapi.model.enums.ProblemType;

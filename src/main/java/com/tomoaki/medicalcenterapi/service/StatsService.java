@@ -1,6 +1,6 @@
 package com.tomoaki.medicalcenterapi.service;
 
-import com.tomoaki.medicalcenterapi.model.Problem;
+import com.tomoaki.medicalcenterapi.model.entity.Problem;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

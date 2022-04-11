@@ -1,4 +1,4 @@
-package com.tomoaki.medicalcenterapi.model;
+package com.tomoaki.medicalcenterapi.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;

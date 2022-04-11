@@ -2,8 +2,8 @@ package com.tomoaki.medicalcenterapi.service;
 
 import com.tomoaki.medicalcenterapi.exception.UserSaveException;
 import com.tomoaki.medicalcenterapi.filter.JwtAuthenticationToken;
-import com.tomoaki.medicalcenterapi.model.User;
 import com.tomoaki.medicalcenterapi.model.UserDetailsImpl;
+import com.tomoaki.medicalcenterapi.model.entity.User;
 import com.tomoaki.medicalcenterapi.repository.UserRepository;
 import com.tomoaki.medicalcenterapi.security.JwtUtils;
 import java.time.LocalDate;

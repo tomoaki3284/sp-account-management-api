@@ -1,7 +1,7 @@
 package com.tomoaki.medicalcenterapi.controller;
 
 import com.tomoaki.medicalcenterapi.model.Response;
-import com.tomoaki.medicalcenterapi.model.User;
+import com.tomoaki.medicalcenterapi.model.entity.User;
 import com.tomoaki.medicalcenterapi.security.JwtUtils;
 import com.tomoaki.medicalcenterapi.service.ReactiveUserDetailsServiceImpl;
 import java.util.Map;

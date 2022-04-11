@@ -1,6 +1,7 @@
 package com.tomoaki.medicalcenterapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tomoaki.medicalcenterapi.model.entity.User;
 import java.util.Collection;
 import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,7 @@
 package com.tomoaki.medicalcenterapi.model.yaml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 public class RoleRegistry {
 	
@@ -47,5 +48,10 @@ public class RoleRegistry {
 	public void setSqlRestrictionModel(
 		SqlRestrictionModel sqlRestrictionModel) {
 		this.sqlRestrictionModel = sqlRestrictionModel;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getRole(), getDescription(), getSqlRestrictionModel());
 	}
 }

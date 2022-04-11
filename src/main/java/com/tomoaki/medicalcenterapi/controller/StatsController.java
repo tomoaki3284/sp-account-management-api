@@ -1,6 +1,6 @@
 package com.tomoaki.medicalcenterapi.controller;
 
-import com.tomoaki.medicalcenterapi.model.Problem;
+import com.tomoaki.medicalcenterapi.model.entity.Problem;
 import com.tomoaki.medicalcenterapi.model.enums.Difficulty;
 import com.tomoaki.medicalcenterapi.model.enums.ProblemType;
 import com.tomoaki.medicalcenterapi.service.StatsService;

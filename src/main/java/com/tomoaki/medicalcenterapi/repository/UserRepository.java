@@ -1,6 +1,6 @@
 package com.tomoaki.medicalcenterapi.repository;
 
-import com.tomoaki.medicalcenterapi.model.User;
+import com.tomoaki.medicalcenterapi.model.entity.User;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
