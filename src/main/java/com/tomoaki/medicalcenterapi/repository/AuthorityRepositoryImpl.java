@@ -31,24 +31,25 @@ public class AuthorityRepositoryImpl {
 	 * @param role
 	 * @return boolean
 	 */
-	private boolean roleExistsByAppCode(String app, String role) {
+	public Mono<Boolean> roleExistsByAppCode(String app, String role) {
 		List<RoleRegistry> roleRegistries = roleRegistriesByApp.get(app);
 		
 		if (roleRegistries == null || roleRegistries.size() == 0) {
-			return false;
+			return Mono.just(false);
 		}
 		
-		return roleRegistries
+		boolean res = roleRegistries
 			.stream()
 			.anyMatch(roleRegistry -> roleRegistry.getRole().equals(role));
+		
+		return Mono.just(res);
 	}
 	
-	private Mono<UserRolePair> findById(Long uid) {
+	public Mono<UserRolePair> findById(Long uid) {
 		return authorityRepository.findById(uid);
 	}
 	
-	private Mono<UserRolePair> save(Long uid, String role) {
-		UserRolePair userRolePair = new UserRolePair(uid, role);
+	public Mono<UserRolePair> save(UserRolePair userRolePair) {
 		return authorityRepository.save(userRolePair);
 	}
 }
