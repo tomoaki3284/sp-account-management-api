@@ -65,7 +65,7 @@ public class AuthController {
 			));
 	}
 	
-	@PostMapping(value = "/signup/{app}")
+	@PostMapping(path = "/signup/{appCode}")
 	public Mono<ResponseEntity<?>> registerUser(
 		@PathVariable String appCode,
 		@RequestBody Map<String,Object> requestBody
@@ -99,7 +99,6 @@ public class AuthController {
 				}
 				// if success
 				else {
-					
 					return authorityService
 						// check if role exists
 						.roleExistsByAppCode(appCode, role)
@@ -120,7 +119,7 @@ public class AuthController {
 						// Here, role is saved, so response with 200 - ok
 						.flatMap(res -> createResponseEntity("success", HttpStatus.OK))
 						// otherwise, return with proper status code
-						.switchIfEmpty(Mono.defer(() -> createResponseEntity("server couldn't save information", HttpStatus.INSUFFICIENT_STORAGE)));
+						.switchIfEmpty(Mono.defer(() -> createResponseEntity("server save failure, check if role exists", HttpStatus.INSUFFICIENT_STORAGE)));
 				}
 			});
 	}

@@ -4,19 +4,23 @@ import com.tomoaki.medicalcenterapi.model.entity.UserRolePair;
 import com.tomoaki.medicalcenterapi.model.yaml.RoleRegistry;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-@Repository
-public class AuthorityRepositoryImpl {
+@Service
+public class AuthorityRepoLayer {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthorityRepoLayer.class);
 	
 	private final Map<String, List<RoleRegistry>> roleRegistriesByApp;
 	
 	private AuthorityRepository authorityRepository;
 	
 	@Autowired
-	public AuthorityRepositoryImpl(
+	public AuthorityRepoLayer(
 		Map<String, List<RoleRegistry>> roleRegistriesByApp,
 		AuthorityRepository authorityRepository
 	) {
@@ -50,6 +54,7 @@ public class AuthorityRepositoryImpl {
 	}
 	
 	public Mono<UserRolePair> save(UserRolePair userRolePair) {
+		logger.debug("userRolePair save {}", userRolePair);
 		return authorityRepository.save(userRolePair);
 	}
 }
