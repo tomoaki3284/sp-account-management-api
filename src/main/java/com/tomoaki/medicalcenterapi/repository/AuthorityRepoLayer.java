@@ -4,6 +4,7 @@ import com.tomoaki.medicalcenterapi.model.entity.UserRolePair;
 import com.tomoaki.medicalcenterapi.model.yaml.RoleRegistry;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,21 @@ public class AuthorityRepoLayer {
 		return Mono.just(res);
 	}
 	
-	public Mono<List<RoleRegistry>> getRoleRegistriesByAppCode(String appCode) {
-		return Mono.just(roleRegistriesByApp.get(appCode));
+	/**
+	 * Returns roleRegistry that is in the roleNames
+	 *
+	 * @param appCode
+	 * @param roleNames
+	 * @return
+	 */
+	public Mono<List<RoleRegistry>> getRoleRegistriesByAppCode(String appCode, List<String> roleNames) {
+		return Mono.just(
+			roleRegistriesByApp
+				.get(appCode)
+				.stream()
+				.filter(roleRegistry -> roleNames.contains(roleRegistry.getRole()))
+				.collect(Collectors.toList())
+		);
 	}
 	
 	public Mono<UserRolePair> findById(Long uid) {
