@@ -49,6 +49,10 @@ public class AuthorityRepoLayer {
 		return Mono.just(res);
 	}
 	
+	public Mono<List<RoleRegistry>> getRoleRegistriesByAppCode(String appCode) {
+		return Mono.just(roleRegistriesByApp.get(appCode));
+	}
+	
 	public Mono<UserRolePair> findById(Long uid) {
 		return authorityRepository.findById(uid);
 	}
