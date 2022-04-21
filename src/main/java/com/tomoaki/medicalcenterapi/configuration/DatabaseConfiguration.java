@@ -40,7 +40,7 @@ public class DatabaseConfiguration extends AbstractR2dbcConfiguration {
 	}
 	
 	@Bean
-	public DatabaseClient databaseClient(ConnectionFactory connectionFactory) {
-			return DatabaseClient.create(connectionFactory);
+	public DatabaseClient leetcodeDatabaseClient(ConnectionFactory connectionFactory) {
+		return DatabaseClient.create(connectionFactory);
 	}
 }

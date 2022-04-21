@@ -67,8 +67,10 @@ public class AuthorityRepoLayer {
 		);
 	}
 	
-	public Mono<UserRolePair> findById(Long uid) {
-		return authorityRepository.findById(uid);
+	public Mono<List<String>> getRolesById(Long uid) {
+		return authorityRepository
+			.getRolesByUserID(uid)
+			.collectList();
 	}
 	
 	public Mono<UserRolePair> save(UserRolePair userRolePair) {

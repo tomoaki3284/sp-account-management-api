@@ -1,20 +1,26 @@
 package com.tomoaki.medicalcenterapi.service;
 
+import com.tomoaki.medicalcenterapi.controller.GeneralController;
 import com.tomoaki.medicalcenterapi.model.entity.UserRolePair;
 import com.tomoaki.medicalcenterapi.model.yaml.RoleRegistry;
 import com.tomoaki.medicalcenterapi.repository.AuthorityRepoLayer;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
 public class AuthorityService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(GeneralController.class);
 	
 	private AuthorityRepoLayer authorityRepoLayer;
 	
@@ -23,6 +29,15 @@ public class AuthorityService {
 		AuthorityRepoLayer authorityRepoLayer
 	) {
 		this.authorityRepoLayer = authorityRepoLayer;
+	}
+	
+	public Mono<List<RoleRegistry>> getRoleRegistriesById(Long userId, String appCode) {
+		return authorityRepoLayer
+			.getRolesById(userId)
+			.flatMap(roles -> authorityRepoLayer
+				.getRoleRegistriesByAppCode(appCode, roles)
+			)
+			.doOnNext(roleRegistries -> logger.info("roleRegistries: {}", Arrays.toString(roleRegistries.toArray())));
 	}
 	
 	public Mono<Boolean> roleExistsByAppCode(String app, String role) {
@@ -38,12 +53,11 @@ public class AuthorityService {
 		String queryCommand,
 		List<String> accessTables,
 		Map<String, List<String>> accessFieldsByTables,
-		List<RoleRegistry> roleRegistries,
-		String appCode
+		List<RoleRegistry> roleRegistries
 	) {
-		if (queryCommand.equals("SELECT")) {
+		if (queryCommand.toUpperCase().equals("SELECT")) {
 			Map<String, List<String>> forbiddenFieldsByTables = getUnionOfForbiddenFieldsByTables(roleRegistries);
-			return Mono.just(queryNotAccessForbiddenFields(accessFieldsByTables, forbiddenFieldsByTables));
+			return Mono.just(!queryAccessForbiddenFields(accessFieldsByTables, forbiddenFieldsByTables));
 		} else {
 			List<String> unionForbiddenTables = getUnionOfForbiddenTables(roleRegistries, queryCommand);
 			// return true if query doesn't access forbidden table
@@ -51,15 +65,26 @@ public class AuthorityService {
 		}
 	}
 	
-	private boolean queryNotAccessForbiddenFields(Map<String, List<String>> accessFieldsByTables, Map<String, List<String>> forbiddenFieldsByTables) {
-		return accessFieldsByTables
+	private boolean queryAccessForbiddenFields(
+		Map<String, List<String>> accessFieldsByTables,
+		Map<String, List<String>> forbiddenFieldsByTables
+	) {
+		boolean res = accessFieldsByTables
 			.keySet()
 			.stream()
 			.anyMatch(
-				key -> forbiddenFieldsByTables.containsKey(key) &&
-					Collections
-						.disjoint(accessFieldsByTables.get(key), forbiddenFieldsByTables.get(key))
+				key -> {
+					boolean match = forbiddenFieldsByTables.containsKey(key) &&
+						Collections.disjoint(
+							accessFieldsByTables.get(key),
+							forbiddenFieldsByTables.get(key)
+						);
+					
+					return match;
+				}
 			);
+		
+		return res;
 	}
 	
 	private Map<String, List<String>> getUnionOfForbiddenFieldsByTables(List<RoleRegistry> roleRegistries) {
