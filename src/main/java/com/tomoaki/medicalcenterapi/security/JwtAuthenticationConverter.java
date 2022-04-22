@@ -31,6 +31,7 @@ public class JwtAuthenticationConverter implements ServerAuthenticationConverter
 		String authorization = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 		
 		assert authorization != null;
+		// todo: this generate NPE when no "bearer " token is attached to the header
 		if (!authorization.startsWith(AUTH_HEADER_PREFIX)) {
 			return Mono.empty();
 		}

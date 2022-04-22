@@ -17,6 +17,7 @@ public class User {
 	
 	@JsonIgnore
 	@Id
+	@Column("User_ID")
 	private long id;
 	
 	@Column
@@ -87,5 +88,13 @@ public class User {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	@Override
+	public String toString() {
+		return "\n{"
+			+ "\n\tusername: " + getUsername()
+			+ "\n\tid: " + getId()
+			+ "\n}";
 	}
 }

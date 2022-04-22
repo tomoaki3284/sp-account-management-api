@@ -82,4 +82,13 @@ public class UserDetailsImpl implements UserDetails {
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(id, user.id);
 	}
+	
+	@Override
+	public String toString() {
+		return "\n{"
+			+ "\n\tusername: " + getUsername()
+			+ "\n\tpassword: " + getPassword()
+			+ "\n\tid: " + getId()
+			+ "\n}";
+	}
 }

@@ -2,6 +2,8 @@ package com.tomoaki.medicalcenterapi.filter;
 
 import com.tomoaki.medicalcenterapi.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -19,6 +21,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component("jwt")
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+	
+	private static final Logger logger = LoggerFactory.getLogger(JwtReactiveAuthenticationManager.class);
 	
 	private final JwtUtils jwtUtil;
 	private final ReactiveUserDetailsService userDetailsService;
@@ -45,6 +49,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
 		// if not found, return exception
 		return this.userDetailsService.findByUsername(username)
 			.switchIfEmpty(Mono.error(new BadCredentialsException("invalid credentials")))
+			.doOnNext(userDetails -> logger.info("user details is: {}", userDetails.toString()))
 			.map(userDetails -> new JwtAuthenticationToken(userDetails, token, userDetails.getAuthorities()));
 	}
 }

@@ -1,16 +1,22 @@
 package com.tomoaki.medicalcenterapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("UserRole")
+@Table("RoleAssignment")
 public class UserRolePair {
 	
+	@JsonIgnore
 	@Id
+	@Column("Role_Assignment_ID")
+	private Long roleID;
+	
+	@Column("User_ID")
 	private Long userID;
 	
-	@Column
+	@Column("Role")
 	private String role;
 	
 	public UserRolePair(Long userID, String role) {

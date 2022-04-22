@@ -47,14 +47,13 @@ public class ReactiveUserDetailsServiceImpl implements ReactiveUserDetailsServic
 			.map(UserDetailsImpl::build);
 	}
 	
-	public Mono<Boolean> saveUser(User user) {
+	public Mono<User> saveUser(User user) {
 		LocalDate date = LocalDate.now();
 		user.setDate(date);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository
 			.save(user)
-			.switchIfEmpty(Mono.defer(() -> Mono.error(new UserSaveException("user couldn't be save"))))
-			.flatMap(u -> Mono.just(true));
+			.switchIfEmpty(Mono.defer(() -> Mono.error(new UserSaveException("user couldn't be save"))));
 	}
 	
 	public Mono<Integer> existsByUsername(String username) {

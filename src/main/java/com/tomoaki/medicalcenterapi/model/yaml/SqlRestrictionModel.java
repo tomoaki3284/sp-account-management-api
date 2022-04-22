@@ -31,6 +31,16 @@ public class SqlRestrictionModel {
 	
 	}
 	
+	public List<String> getForbiddenTableBySqlCommand(String sqlCommand) {
+		if (sqlCommand.equals("DELETE")) {
+			return deleteForbiddenTable;
+		} else if (sqlCommand.equals("UPDATE")) {
+			return updateForbiddenTable;
+		} else {
+			return insertForbiddenTable;
+		}
+	}
+	
 	public List<String> getDeleteForbiddenTable() {
 		return deleteForbiddenTable;
 	}
@@ -62,5 +72,10 @@ public class SqlRestrictionModel {
 	public void setAccessForbiddenFieldByTable(
 		Map<String, List<String>> accessForbiddenFieldByTable) {
 		this.accessForbiddenFieldByTable = accessForbiddenFieldByTable;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

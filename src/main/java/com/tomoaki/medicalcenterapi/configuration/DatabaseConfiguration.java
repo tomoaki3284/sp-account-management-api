@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.r2dbc.core.DatabaseClient;
 
 @Configuration
 @EnableR2dbcRepositories
@@ -36,5 +37,10 @@ public class DatabaseConfiguration extends AbstractR2dbcConfiguration {
 		ConnectionFactory connectionFactory = ConnectionFactories.get(dbUrl);
 		
 		return connectionFactory;
+	}
+	
+	@Bean
+	public DatabaseClient leetcodeDatabaseClient(ConnectionFactory connectionFactory) {
+		return DatabaseClient.create(connectionFactory);
 	}
 }
