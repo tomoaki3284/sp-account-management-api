@@ -54,4 +54,12 @@ public class RoleRegistry {
 	public int hashCode() {
 		return Objects.hash(getRole(), getDescription(), getSqlRestrictionModel());
 	}
+	
+	@Override
+	public String toString() {
+		return "\n{"
+			+ "\n\trole: " + getRole()
+			+ "\n\tSqlRestrictionModel: " + getSqlRestrictionModel()
+			+ "\n}";
+	}
 }

@@ -73,4 +73,9 @@ public class SqlRestrictionModel {
 		Map<String, List<String>> accessForbiddenFieldByTable) {
 		this.accessForbiddenFieldByTable = accessForbiddenFieldByTable;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }

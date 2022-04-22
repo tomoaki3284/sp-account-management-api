@@ -2,7 +2,6 @@ package com.tomoaki.medicalcenterapi.service;
 
 import com.tomoaki.medicalcenterapi.repository.GeneralRepository;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,18 +23,25 @@ public class GeneralService {
 		this.generalRepository = generalRepository;
 	}
 	
-	public Mono<List<HashMap<String, Object>>> executeQuery(
+	public Mono executeQuery(
 		String query,
 		String queryCommand,
 		Map<String, List<String>> accessFieldsByTable
 	) {
-		// get all access fields as list
-		final List<String> accessFields = accessFieldsByTable
-			.values()
-			.stream()
-			.flatMap(Collection::stream)
-			.collect(Collectors.toUnmodifiableList());
+		if (queryCommand.equals("SELECT")) {
+			// get all access fields as list
+			final List<String> accessFields = accessFieldsByTable
+				.values()
+				.stream()
+				.flatMap(Collection::stream)
+				.collect(Collectors.toUnmodifiableList());
+			
+			return generalRepository.executeSelectQuery(query, accessFields);
+		} else {
+			return generalRepository
+				.executeModificationQuery(query)
+				.map(affectedRows -> Map.of("success", affectedRows <= 1));
+		}
 		
-		return generalRepository.executeQuery(query, accessFields);
 	}
 }

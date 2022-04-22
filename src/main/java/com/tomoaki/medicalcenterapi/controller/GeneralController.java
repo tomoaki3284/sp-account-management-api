@@ -49,27 +49,20 @@ public class GeneralController {
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		
-		Mono<ResponseEntity<Object>> response = authorityService
+		Mono response = authorityService
 			.getRoleRegistriesById(userDetails.getId(), appCode)
-			.flatMap(roleRegistries -> {
-				return authorityService
-					.queryNotAccessForbiddenTables(
-						queryCommand,
-						accessTables,
-						accessFieldsByTable,
-						roleRegistries
-					);
-			})
-			.flatMap(success -> {
-				return success ? Mono.just(success) : Mono.empty();
-			})
-			.flatMap(a -> {
-				return generalService
-					.executeQuery(query, queryCommand, accessFieldsByTable)
-					.flatMap(res -> {
-						return Mono.just(createEntity(HttpStatus.OK, res));
-					});
-			})
+			// check if query doesn't access forbidden tables
+			.flatMap(roleRegistries -> authorityService
+				.queryNotAccessForbiddenTables(
+					queryCommand,
+					accessTables,
+					accessFieldsByTable,
+					roleRegistries
+				))
+			.flatMap(success -> success ? Mono.just(true) : Mono.empty())
+			.flatMap(a -> generalService
+				.executeQuery(query, queryCommand, accessFieldsByTable)
+				.flatMap(res -> Mono.just(createEntity(HttpStatus.OK, res))))
 			.switchIfEmpty(Mono.defer(() -> Mono.just(createEntity(HttpStatus.FORBIDDEN, null))));
 		
 		return response;

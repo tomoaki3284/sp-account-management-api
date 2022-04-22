@@ -1,0 +1,36 @@
+roleRegistry:
+  -
+    role: "User"
+    description: ""
+    sqlRestrictionModel:
+      DELETE:
+        - problem
+        - problemRecord
+      INSERT:
+        - problem
+      UPDATE:
+        - problem
+      accessForbiddenFieldByTable:
+        problemRecord:
+          - creation-date
+          - solved-time
+        problem:
+          - backend-id
+  -
+    role: "User2"
+    description: ""
+    sqlRestrictionModel:
+      DELETE:
+        - problemRecord
+      INSERT:
+        - problem
+      UPDATE:
+        - problem
+      accessForbiddenFieldByTable:
+        problemRecord:
+          - creation-date
+          - solved-time
+        problem:
+          - backend-id
+        User:
+          - User_ID

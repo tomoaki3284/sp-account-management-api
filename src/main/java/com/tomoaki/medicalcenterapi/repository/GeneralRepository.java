@@ -24,7 +24,7 @@ public class GeneralRepository {
 		this.connectionFactory = connectionFactory;
 	}
 	
-	public Mono<List<HashMap<String, Object>>> executeQuery(String query, List<String> accessFields) {
+	public Mono<List<HashMap<String, Object>>> executeSelectQuery(String query, List<String> accessFields) {
 		R2dbcEntityTemplate r2dbcEntityTemplate = new R2dbcEntityTemplate(connectionFactory);
 		
 		return r2dbcEntityTemplate
@@ -46,5 +46,15 @@ public class GeneralRepository {
 				)))
 			.all()
 			.collectList();
+	}
+	
+	public Mono<Integer> executeModificationQuery(String query) {
+		R2dbcEntityTemplate r2dbcEntityTemplate = new R2dbcEntityTemplate(connectionFactory);
+		
+		return r2dbcEntityTemplate
+			.getDatabaseClient()
+			.sql(query)
+			.fetch()
+			.rowsUpdated();
 	}
 }

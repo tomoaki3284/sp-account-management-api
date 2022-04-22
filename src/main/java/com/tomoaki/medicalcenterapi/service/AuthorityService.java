@@ -75,7 +75,7 @@ public class AuthorityService {
 			.anyMatch(
 				key -> {
 					boolean match = forbiddenFieldsByTables.containsKey(key) &&
-						Collections.disjoint(
+						!Collections.disjoint(
 							accessFieldsByTables.get(key),
 							forbiddenFieldsByTables.get(key)
 						);

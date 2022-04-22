@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomoaki.medicalcenterapi.model.yaml.RoleRegistry;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class RoleRegistryConfig {
 				try (InputStream is = new ClassPathResource(registeredAppYamlFileName).getInputStream()) {
 					json = convertYamlToJson(is);
 					List<RoleRegistry> roleRegistries = convertJsonToRoleRegistries(json);
+					LOGGER.info("read roleRegistries: {}", Arrays.toString(roleRegistries.toArray()));
 					roleRegistriesByAppCode.put(appCode, roleRegistries);
 				} catch (IOException e) {
 					LOGGER.error("Yaml file associated with the appCode not found. AppCode {}", appCode, e);
